@@ -39,42 +39,77 @@ async function main() {
 
         const cmd = cmdInput as Command;
 
-        // try{
-            if (cmd === "add"){
-                const name = await rl.question("** Enter item name: ");
-                const type = await rl.question("** Enter item type (top | bottom | shoes | accessory): ") as ItemType;
-                const color = await rl.question("** Enter item color: ");
-                const style = await rl.question("** Enter item style (casual | formal | sport): ") as Style;
-                
-                const item = new ClothingItem(0, name, type, color, style);
-                let addedId = wardrobe.addItem(item);
+    
+        if (cmd === "add"){
+            const name = await rl.question("** Enter item name: ");
+
+            const typeInput = await rl.question("** Enter item type (top | bottom | shoes): ");
+            if (typeInput !== "top" && typeInput !== "bottom" && typeInput !== "shoes") {
+                console.log("Invalid item type. Please try again.");
+                continue;
+            }
+            const type = typeInput as ItemType;
+
+            const color = await rl.question("** Enter item color: ");
+
+            const styleInput = await rl.question("** Enter item style (casual | formal): ");
+            if (styleInput !== "casual" && styleInput !== "formal") {
+                console.log("Invalid style. Please try again.");
+            continue;
+            }
+            const style = styleInput as Style;
+
+            const item = new ClothingItem(0, name, type, color, style);
+
+            try{
+                const addedId = wardrobe.addItem(item);
                 console.log(`** Added item: ${name} id:${addedId}`);
-            }
-            else if (cmd === "remove"){
-                const inputId = await rl.question("** Enter id of item you want to remove: ");
+            } catch (err){
+                if (err instanceof DuplicateItemError){
+                    console.error("Error: That item ID already exists, cannot add duplicate.");
+                } else{
+                    console.error("Unexpected error while adding item:", err);
+                }
+            }  
+        }
+        else if (cmd === "remove"){
+            const inputId = await rl.question("** Enter id of item you want to remove: ");
                 
-                const removeId = Number(inputId);
-                let removedId = wardrobe.removeItem(removeId);
-                console.log(`** Removed item with id: ${removedId}`);
+            const removeId = Number(inputId);
+
+            if (Number.isNaN(removeId)){
+                console.log("Invalid ID entered; please enter a numeric ID.");
+            } else {
+                try{
+                    const removedId = wardrobe.removeItem(removeId);
+                    console.log(`** Removed item with id: ${removedId}`);
+                } catch (err){
+                    if (err instanceof ItemNotFoundError){
+                        console.error(`Error: No item found with id ${removeId}.`);
+                    } else {
+                        console.error("Unexpected error while removing item:", err);
+                    }
+                }
             }
-            else if (cmd === "list"){
-                wardrobe.listItems();
-            }
-            else if (cmd === "save") {
-                await wardrobe.saveToFile("wardrobe.json");
-                console.log("** Wardrobe saved.");
-            }
-            else if (cmd === "load") {
-                await wardrobe.loadFromFile("wardrobe.json");
-                console.log("** Wardrobe loaded.");
-            }
-            else if (cmd === "exit"){
-                console.log("** Exiting Wardrobe Manager. Thank you!                      **");
-                console.log("**-----------------------------------------------------------**");
-                rl.close();
-                break;
-            }
-        // }
+            
+        }
+        else if (cmd === "list"){
+            wardrobe.listItems();
+        }
+        else if (cmd === "save") {
+            await wardrobe.saveToFile("wardrobe.json");
+            console.log("** Wardrobe saved.");
+        }
+        else if (cmd === "load") {
+            await wardrobe.loadFromFile("wardrobe.json");
+            console.log("** Wardrobe loaded.");
+        }
+        else if (cmd === "exit"){
+            console.log("** Exiting Wardrobe Manager. Thank you!                      **");
+            console.log("**-----------------------------------------------------------**");
+            rl.close();
+            break;
+        }
     }
 
 }

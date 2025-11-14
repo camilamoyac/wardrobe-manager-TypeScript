@@ -58,13 +58,16 @@ export class Wardrobe {
             const fileData = await fs.readFile(filePath, "utf8");
             const obj = JSON.parse(fileData);
             this.nextId = obj.nextId;
-            this.items = obj.items.map(itemData => new ClothingItem(itemData.id, itemData.name, itemData.itemType, itemData.color, itemData.style));
+            this.items = obj.items.map(itemData => {
+                const itemType = itemData.itemType;
+                const style = itemData.style;
+                return new ClothingItem(itemData.id, itemData.name, itemType, itemData.color, style);
+            });
             console.log(`Wardrobe loaded from '${filePath}'.`);
         }
         catch (err) {
             if (err.code === "ENOENT") {
                 console.log(`No existing file at '${filePath}', starting with empty wardrobe.`);
-                // file not found is OK — just skip
             }
             else {
                 console.error("Error loading wardrobe:", err);

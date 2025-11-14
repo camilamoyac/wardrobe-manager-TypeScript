@@ -1,6 +1,7 @@
 //Wardrobe class module, defines wardrobe class and methods.
 
 import { ClothingItem } from "./ClothingItem.js";
+import { ItemType, Style } from "./ClothingItem.js";
 import { ItemNotFoundError, DuplicateItemError } from "./Errors.js";
 import { promises as fs } from "node:fs";
 
@@ -76,32 +77,34 @@ export class Wardrobe {
     const json = JSON.stringify(data, null, 2);
     await fs.writeFile(filePath, json, "utf8");
     console.log(`Wardrobe saved to '${filePath}'.`);
-  }
+    }
 
   async loadFromFile(filePath: string): Promise<void> {
     try {
-      const fileData = await fs.readFile(filePath, "utf8");
-      const obj = JSON.parse(fileData) as PersistedWardrobe;
+        const fileData = await fs.readFile(filePath, "utf8");
+        const obj = JSON.parse(fileData) as PersistedWardrobe;
 
-      this.nextId = obj.nextId;
-      this.items = obj.items.map(itemData =>
-        new ClothingItem(
-          itemData.id,
-          itemData.name,
-          itemData.itemType as any,
-          itemData.color,
-          itemData.style as any
-        )
-      );
+        this.nextId = obj.nextId;
+        this.items = obj.items.map(itemData => {
+        const itemType = itemData.itemType as ItemType;
+        const style    = itemData.style    as Style;
 
-      console.log(`Wardrobe loaded from '${filePath}'.`);
-    } catch (err) {
-      if ((err as any).code === "ENOENT") {
+        return new ClothingItem(
+            itemData.id,
+            itemData.name,
+            itemType,
+            itemData.color,
+            style
+        );
+        });
+
+        console.log(`Wardrobe loaded from '${filePath}'.`);
+    } catch (err: any) {
+        if (err.code === "ENOENT") {
         console.log(`No existing file at '${filePath}', starting with empty wardrobe.`);
-        // file not found is OK — just skip
-      } else {
+        } else {
         console.error("Error loading wardrobe:", err);
-      }
+        }
     }
   }
 
