@@ -1,0 +1,20 @@
+{
+  "name": "wardrobe-manager-typescript",
+  "version": "1.0.0",
+  "description": "App to manage your wardrobe by adding your clothing items and making outfits made with TypeScript.",
+  "homepage": "https://github.com/camilamoyac/wardrobe-manager-TypeScript#readme",
+  "bugs": {
+    "url": "https://github.com/camilamoyac/wardrobe-manager-TypeScript/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camilamoyac/wardrobe-manager-TypeScript.git"
+  },
+  "license": "ISC",
+  "author": "Camila Moya Casanova",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

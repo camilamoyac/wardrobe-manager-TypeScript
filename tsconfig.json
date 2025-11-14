@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "strictNullChecks": true,
+        "noImplicitAny": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "tutorial"
+    ]
+}

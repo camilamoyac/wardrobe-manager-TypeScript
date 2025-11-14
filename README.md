@@ -18,10 +18,9 @@
 
 # Useful Websites
 
-{Make a list of websites that you found helpful in this project}
-
-- [Web Site Name](http://url.link.goes.here)
-- [Web Site Name](http://url.link.goes.here)
+- [TypeScript Official Documentation](https://www.typescriptlang.org/docs/handbook)
+- [Daweb Schools | TYPESCRIPT In Under 2 Hours](https://www.youtube.com/watch?v=w1y1pyQbQqo)
+- []()
 
 # Future Work
 
