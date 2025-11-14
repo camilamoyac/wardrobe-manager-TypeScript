@@ -12,9 +12,14 @@
   },
   "license": "ISC",
   "author": "Camila Moya Casanova",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1"
   }
 }

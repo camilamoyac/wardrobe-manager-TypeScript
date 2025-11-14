@@ -1,0 +1,26 @@
+{
+  "nextId": 4,
+  "items": [
+    {
+      "id": 1,
+      "name": "cropped green shirt",
+      "itemType": "top",
+      "color": "green",
+      "style": "casual"
+    },
+    {
+      "id": 2,
+      "name": "fake crocs",
+      "itemType": "shoes",
+      "color": "pink",
+      "style": "casual"
+    },
+    {
+      "id": 3,
+      "name": "jorts",
+      "itemType": "bottom",
+      "color": "light blue",
+      "style": "casual"
+    }
+  ]
+}
