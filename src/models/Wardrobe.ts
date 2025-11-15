@@ -173,7 +173,6 @@ export class Wardrobe {
 
         const json = JSON.stringify(data, null, 2);
         await fs.writeFile(filePath, json, "utf8");
-        console.log(`** Wardrobe saved to '${filePath}'.`);
     }
 
     //Load wardrobe data from a JSON file and rebuild in-memory structures.
@@ -209,7 +208,6 @@ export class Wardrobe {
                 }
             }
 
-            console.log(`** Wardrobe loaded from '${filePath}'.`);
         } catch (err: any) {
             if (err.code === "ENOENT") {
                 console.log(`No existing file at '${filePath}', starting with empty wardrobe.`);

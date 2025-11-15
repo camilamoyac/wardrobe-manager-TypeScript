@@ -132,13 +132,13 @@ async function main() {
             // --- SAVE: asynchronous persistence ---
             // Writes current wardrobe to 'wardrobe.json'. Uses await so the CLI waits for completion.
             await wardrobe.saveToFile("wardrobe.json");
-            console.log("** Wardrobe saved.");
+            console.log("** Wardrobe saved to 'wardrobe.json'.");
         }
         else if (cmd === "load") {
             // --- LOAD: asynchronous restore ---
             // Loads from 'wardrobe.json' and rebuilds in-memory structures (including category tree).
             await wardrobe.loadFromFile("wardrobe.json");
-            console.log("** Wardrobe loaded.");
+            console.log("** Wardrobe loaded from 'wardrobe.json'.");  
         }
         else if (cmd === "category") {
             // --- CATEGORY: show items by category ---

@@ -135,7 +135,6 @@ export class Wardrobe {
         };
         const json = JSON.stringify(data, null, 2);
         await fs.writeFile(filePath, json, "utf8");
-        console.log(`** Wardrobe saved to '${filePath}'.`);
     }
     //Load wardrobe data from a JSON file and rebuild in-memory structures.
     //1. read and parse the JSON file into the persisted shape
@@ -160,7 +159,6 @@ export class Wardrobe {
                     node.items.push(item);
                 }
             }
-            console.log(`** Wardrobe loaded from '${filePath}'.`);
         }
         catch (err) {
             if (err.code === "ENOENT") {

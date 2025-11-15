@@ -1,5 +1,5 @@
 {
-  "nextId": 7,
+  "nextId": 12,
   "items": [
     {
       "id": 1,
@@ -39,6 +39,41 @@
     {
       "id": 6,
       "name": "black kitten heels",
+      "itemType": "shoes",
+      "color": "black",
+      "style": "formal"
+    },
+    {
+      "id": 7,
+      "name": "red tshirt",
+      "itemType": "top",
+      "color": "red",
+      "style": "casual"
+    },
+    {
+      "id": 8,
+      "name": "band t-shirt",
+      "itemType": "top",
+      "color": "black",
+      "style": "casual"
+    },
+    {
+      "id": 9,
+      "name": "blue jeans",
+      "itemType": "bottom",
+      "color": "blue",
+      "style": "casual"
+    },
+    {
+      "id": 10,
+      "name": "vans",
+      "itemType": "shoes",
+      "color": "white",
+      "style": "casual"
+    },
+    {
+      "id": 11,
+      "name": "loafers",
       "itemType": "shoes",
       "color": "black",
       "style": "formal"
