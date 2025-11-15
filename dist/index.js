@@ -15,15 +15,17 @@ async function main() {
     console.log("** list: show all items in your wardrobe                     **");
     console.log("** save: save wardrobe to file                               **");
     console.log("** load: load wardrobe from file                             **");
+    console.log("** category: show items from a specific category             **");
+    console.log("** suggest: suggest a random outfit by style                 **");
     console.log("** exit: exit your wardrobe                                  **");
     console.log("**-----------------------------------------------------------**");
     while (true) {
         const line = await rl.question("** Enter command >> ");
         const parts = line.trim().split(" ");
         const cmdInput = parts[0].toLowerCase();
-        if (!["add", "remove", "list", "save", "load", "exit"].includes(cmdInput)) {
+        if (!["add", "remove", "list", "save", "load", "category", "suggest", "exit"].includes(cmdInput)) {
             console.log(`Unrecognized command: ${cmdInput}.`);
-            console.log(`You must type a valid command (add | remove | list | save | load | exit)`);
+            console.log(`You must type a valid command (add | remove | list | save | load | category | suggest | exit)`);
             continue;
         }
         const cmd = cmdInput;
@@ -87,6 +89,64 @@ async function main() {
         else if (cmd === "load") {
             await wardrobe.loadFromFile("wardrobe.json");
             console.log("** Wardrobe loaded.");
+        }
+        else if (cmd === "category") {
+            const styleInput = await rl.question("** Enter style (casual | formal) or leave blank: ");
+            const typeInput = await rl.question("** Enter type (top | bottom | shoes) or leave blank: ");
+            // validate if provided
+            if (styleInput && styleInput !== "casual" && styleInput !== "formal") {
+                console.log("Invalid style.");
+                continue;
+            }
+            if (typeInput && typeInput !== "top" && typeInput !== "bottom" && typeInput !== "shoes") {
+                console.log("Invalid type.");
+                continue;
+            }
+            let results = [];
+            if (styleInput && typeInput) {
+                // direct node, no recursion needed
+                const node = wardrobe.findCategoryNode(styleInput, typeInput);
+                results = node ? node.items : [];
+            }
+            else if (styleInput) {
+                // recursive get all items under that style
+                results = wardrobe.getItemsInCategory(styleInput);
+            }
+            else if (typeInput) {
+                // type only: gather items from both styles
+                for (const style of ["casual", "formal"]) {
+                    const node = wardrobe.findCategoryNode(style, typeInput);
+                    if (node) {
+                        results = results.concat(node.items);
+                    }
+                }
+            }
+            else {
+                console.log("Must provide style or type.");
+                continue;
+            }
+            if (results.length === 0) {
+                console.log("No items found in that category.");
+            }
+            else {
+                console.log("Items in category:");
+                for (const item of results) {
+                    console.log(`- ID: ${item.id} | ${item.name} | ${item.itemType} | ${item.color} | ${item.style}`);
+                }
+            }
+        }
+        else if (cmd === "suggest") {
+            const styleInput = await rl.question("** Enter style for outfit (casual | formal): ");
+            if (styleInput !== "casual" && styleInput !== "formal") {
+                console.log("Invalid style choice.");
+            }
+            else {
+                const outfit = wardrobe.getRandomOutfitByStyle(styleInput);
+                console.log("** Here’s a suggested outfit:");
+                console.log(`** Top: ${outfit.top?.name ?? "none"}`);
+                console.log(`** Bottom: ${outfit.bottom?.name ?? "none"}`);
+                console.log(`** Shoes: ${outfit.shoes?.name ?? "none"}`);
+            }
         }
         else if (cmd === "exit") {
             console.log("** Exiting Wardrobe Manager. Thank you!                      **");

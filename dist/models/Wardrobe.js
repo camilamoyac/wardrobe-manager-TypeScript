@@ -2,19 +2,61 @@
 import { ClothingItem } from "./ClothingItem.js";
 import { ItemNotFoundError, DuplicateItemError } from "./Errors.js";
 import { promises as fs } from "node:fs";
+//generic function that takes an array and returns a random element
+function pickRandom(arr) {
+    if (arr.length === 0)
+        return undefined;
+    const idx = Math.floor(Math.random() * arr.length);
+    return arr[idx];
+}
 export class Wardrobe {
     constructor() {
         this.items = []; //list of clothing items
         this.nextId = 1;
+        this.rootCategories = [];
+        this.initCategories();
     }
     //methods
+    //
+    initCategories() {
+        this.rootCategories = ["casual", "formal"].map(styleName => ({
+            name: styleName,
+            items: [],
+            subcategories: ["top", "bottom", "shoes"].map(typeName => ({
+                name: typeName,
+                items: [],
+                subcategories: []
+            }))
+        }));
+    }
+    findCategoryNode(style, type) {
+        const styleNode = this.rootCategories.find(c => c.name === style);
+        return styleNode?.subcategories.find(sc => sc.name === type);
+    }
+    findCategoryByName(name, nodes = this.rootCategories) {
+        for (const node of nodes) {
+            if (node.name === name) {
+                return node;
+            }
+            const found = this.findCategoryByName(name, node.subcategories);
+            if (found)
+                return found;
+        }
+        return undefined;
+    }
     //adds a clothing item to the list(array)
     addItem(item) {
         const newItem = new ClothingItem(this.nextId++, item.name, item.itemType, item.color, item.style);
         if (this.items.some(i => i.id === newItem.id)) {
             throw new DuplicateItemError(`Item with id ${newItem.id} already exists.`);
         }
+        //push into array
         this.items.push(newItem);
+        //push into tree
+        const node = this.findCategoryNode(newItem.style, newItem.itemType);
+        if (node) {
+            node.items.push(newItem);
+        }
         return newItem.id;
     }
     //removes a clothing item from the array
@@ -23,7 +65,16 @@ export class Wardrobe {
         if (index === -1) {
             throw new ItemNotFoundError(`Item with id %{id} not found.`);
         }
-        this.items.splice(index, 1);
+        //remove from array
+        const [removed] = this.items.splice(index, 1);
+        //remove from tree
+        const node = this.findCategoryNode(removed.style, removed.itemType);
+        if (node) {
+            const catIdx = node.items.findIndex(i => i.id === removed.id);
+            if (catIdx !== -1) {
+                node.items.splice(catIdx, 1);
+            }
+        }
         return id;
     }
     //prints the list of items in the wardrobe
@@ -63,6 +114,13 @@ export class Wardrobe {
                 const style = itemData.style;
                 return new ClothingItem(itemData.id, itemData.name, itemType, itemData.color, style);
             });
+            this.initCategories();
+            for (const item of this.items) {
+                const node = this.findCategoryNode(item.style, item.itemType);
+                if (node) {
+                    node.items.push(item);
+                }
+            }
             console.log(`Wardrobe loaded from '${filePath}'.`);
         }
         catch (err) {
@@ -73,5 +131,28 @@ export class Wardrobe {
                 console.error("Error loading wardrobe:", err);
             }
         }
+    }
+    collectItemsRecursive(node) {
+        let results = [...node.items];
+        for (const child of node.subcategories) {
+            results = results.concat(this.collectItemsRecursive(child));
+        }
+        return results;
+    }
+    getItemsInCategory(name) {
+        const node = this.findCategoryByName(name);
+        if (!node)
+            return [];
+        return this.collectItemsRecursive(node);
+    }
+    getRandomOutfitByStyle(style) {
+        const tops = this.items.filter(i => i.itemType === "top" && i.style === style);
+        const bottoms = this.items.filter(i => i.itemType === "bottom" && i.style === style);
+        const shoes = this.items.filter(i => i.itemType === "shoes" && i.style === style);
+        return {
+            top: pickRandom(tops),
+            bottom: pickRandom(bottoms),
+            shoes: pickRandom(shoes),
+        };
     }
 }

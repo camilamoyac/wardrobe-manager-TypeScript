@@ -1,5 +1,5 @@
 {
-  "nextId": 4,
+  "nextId": 5,
   "items": [
     {
       "id": 1,
@@ -21,6 +21,13 @@
       "itemType": "bottom",
       "color": "light blue",
       "style": "casual"
+    },
+    {
+      "id": 4,
+      "name": "cream puff sleeve blouse",
+      "itemType": "top",
+      "color": "cream",
+      "style": "formal"
     }
   ]
 }
