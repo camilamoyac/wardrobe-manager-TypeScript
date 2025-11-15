@@ -115,7 +115,7 @@ async function main() {
                     console.log(`** Removed item with id: ${removedId}`);
                 } catch (err){
                     if (err instanceof ItemNotFoundError){
-                        console.error(`Error: No item found with id ${removeId}.`);
+                        console.error(`Error: No item found with id ${removeId}. Use command list to see item IDs.`);
                     } else {
                         console.error("Unexpected error while removing item:", err);
                     }
