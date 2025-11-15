@@ -6,7 +6,7 @@ The software lets users add, update, delete, categorize, and randomly generate o
 
 This project serves as a personal step toward writing more maintainable, scalable software and becoming more comfortable designing modular systems with TypeScript.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/47TMQjLbDPE)
 
 # Development Environment
 
