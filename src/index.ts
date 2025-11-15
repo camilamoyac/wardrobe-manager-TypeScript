@@ -1,4 +1,17 @@
-//Console App
+//Console CLI for the Wardrobe Manager.
+//Provides a simple interactive loop using Node's readline/promises API.
+// Supported commands:
+//  - add      : Prompt user for clothing fields and add an item
+//  - remove   : Remove an item by numeric id
+//  - list     : List all items in the wardrobe
+//  - save     : Persist wardrobe to JSON file (async)
+//  - load     : Load wardrobe from JSON file (async)
+//  - category : Show items by style or type (uses category tree / recursion)
+//  - suggest  : Suggest a random outfit by style (casual/formal)
+//  - exit     : Quit the program
+//
+// The CLI catches and displays specific custom errors (DuplicateItemError,
+// ItemNotFoundError) so the user gets clear feedback on problems.
 
 import * as readline from "node:readline/promises";
 import{stdin as input, stdout as output} from "process";
@@ -8,8 +21,18 @@ import { ClothingItem } from "./models/ClothingItem.js";
 import { ItemType, Style } from "./models/ClothingItem.js";
 import { ItemNotFoundError, DuplicateItemError } from "./models/Errors.js";
 
+//Union type for accepted CLI commands.
+// Keep this in sync with the command validation list used in the input loop.
 type Command = "add" | "remove" | "list" | "save" | "load" | "suggest" | "category" | "exit";
 
+
+// Main entry point for the CLI application.
+// Sets up a readline interface, constructs a Wardrobe instance, and runs
+// an infinite prompt loop until the user types "exit". Each loop iteration
+// reads a command, validates it, and dispatches to the corresponding
+// handler (add / remove / list / save / load / category / suggest / exit).
+// The function is async because it uses await for readline questions and
+// for wardrobe async persistence methods.
 async function main() {
     const rl = readline.createInterface({ input, output});
     const wardrobe = new Wardrobe();
@@ -42,6 +65,9 @@ async function main() {
 
     
         if (cmd === "add"){
+            // --- ADD: prompt the user for item fields and add to wardrobe ---
+            // Validates type and style inputs then constructs a ClothingItem (id placeholder 0)
+            // and calls wardrobe.addItem inside a try/catch to handle DuplicateItemError.
             const name = await rl.question("** Enter item name: ");
 
             const typeInput = await rl.question("** Enter item type (top | bottom | shoes): ");
@@ -74,6 +100,9 @@ async function main() {
             }  
         }
         else if (cmd === "remove"){
+            // --- REMOVE: ask for numeric id, validate, and remove ---
+            // Converts input to Number, validates, then calls wardrobe.removeItem inside try/catch
+            // which handles ItemNotFoundError for clearer user feedback.
             const inputId = await rl.question("** Enter id of item you want to remove: ");
                 
             const removeId = Number(inputId);
@@ -95,17 +124,26 @@ async function main() {
             
         }
         else if (cmd === "list"){
+            // --- LIST: print the flat list of items ---
+            // Uses the wardrobe.listItems() convenience method to display items.v
             wardrobe.listItems();
         }
         else if (cmd === "save") {
+            // --- SAVE: asynchronous persistence ---
+            // Writes current wardrobe to 'wardrobe.json'. Uses await so the CLI waits for completion.
             await wardrobe.saveToFile("wardrobe.json");
             console.log("** Wardrobe saved.");
         }
         else if (cmd === "load") {
+            // --- LOAD: asynchronous restore ---
+            // Loads from 'wardrobe.json' and rebuilds in-memory structures (including category tree).
             await wardrobe.loadFromFile("wardrobe.json");
             console.log("** Wardrobe loaded.");
         }
         else if (cmd === "category") {
+            // --- CATEGORY: show items by category ---
+            // Prompts for style and/or type. If style only is provided, uses wardrobe.getItemsInCategory
+            // which uses a recursive collector to gather items under the chosen category.
             const styleInput = await rl.question("** Enter style (casual | formal) or leave blank: ");
             const typeInput = await rl.question("** Enter type (top | bottom | shoes) or leave blank: ");
 
@@ -122,7 +160,7 @@ async function main() {
             let results: ClothingItem[] = [];
 
             if (styleInput && typeInput) {
-                // direct node, no recursion needed
+                // direct node, no recursion
                 const node = (wardrobe as any).findCategoryNode(styleInput as Style, typeInput as ItemType);
                 results = node ? node.items : [];
             } else if (styleInput) {
@@ -151,6 +189,9 @@ async function main() {
             }
         }
         else if (cmd === "suggest") {
+            // --- SUGGEST: random outfit by style ---
+            // Prompts for 'casual' or 'formal', filters wardrobe items for that style and each
+            // type (top/bottom/shoes), then picks a random element from each list to form an outfit.
             const styleInput = await rl.question("** Enter style for outfit (casual | formal): ");
             if (styleInput !== "casual" && styleInput !== "formal") {
                 console.log("Invalid style choice.");
@@ -163,6 +204,7 @@ async function main() {
             }
         }
         else if (cmd === "exit"){
+            // --- EXIT: close the readline interface and end the program ---
             console.log("** Exiting Wardrobe Manager. Thank you!                      **");
             console.log("**-----------------------------------------------------------**");
             rl.close();
@@ -172,4 +214,5 @@ async function main() {
 
 }
 
+// Run the main CLI loop and log any unexpected top-level errors.
 main().catch(err => console.error(err));

@@ -1,31 +1,32 @@
 # Overview
 
-{Important! Do not say in this section that this is college assignment. Talk about what you are trying to accomplish as a software engineer to further your learning.}
+This project is a small TypeScript-based wardrobe manager designed to explore and demonstrate core TypeScript concepts in a practical way. The goal was to strengthen my understanding of type definitions, classes, interfaces, custom error handling, and recursion while building something structured and easy to extend.
 
-{Provide a description of the software that you wrote to demonstrate the TypeScript language.}
+The software lets users add, update, delete, categorize, and randomly generate outfits from their wardrobe. I also implemented nested category structures using recursion, which allowed me to work with tree-like data in TypeScript. Throughout the project I focused on writing clean, strongly typed code and learning how TypeScript improves reliability compared to plain JavaScript.
 
-{Describe your purpose for writing this software.}
-
-{Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the software running and a walkthrough of the code. Focus should be on sharing what you learned about the language syntax.}
+This project serves as a personal step toward writing more maintainable, scalable software and becoming more comfortable designing modular systems with TypeScript.
 
 [Software Demo Video](http://youtube.link.goes.here)
 
 # Development Environment
 
-{Describe the tools that you used to develop the software}
+I built this project using:
 
-{Describe the programming language that you used and any libraries.}
+-Visual Studio Code as the main editor
+-Node.js to run TypeScript outside of the browser
+-ts-node, tsconfig, and ES module imports for TypeScript execution
+-Standard TypeScript features such as classes, interfaces, type aliases, custom error classes, recursion, and strict typing
+
+The programming language used was TypeScript, with no external libraries—everything was implemented using built-in language features to focus on understanding the syntax itself.
 
 # Useful Websites
 
 - [TypeScript Official Documentation](https://www.typescriptlang.org/docs/handbook)
 - [Daweb Schools | TYPESCRIPT In Under 2 Hours](https://www.youtube.com/watch?v=w1y1pyQbQqo)
-- []()
+- [FreeCodeCamp](https://www.freecodecamp.org/news/recursive-types-in-typescript-a-brief-exploration/?utm_source=chatgpt.com)
 
 # Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
-
-- Item 1
-- Item 2
-- Item 3
+-Add persistence so the wardrobe is saved (e.g., JSON file or localStorage in a web version)
+-Improve the outfit generator by considering color matching
+-Add more item types (jackets, accessories, etc.) and filtering options
