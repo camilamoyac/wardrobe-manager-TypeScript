@@ -12,10 +12,10 @@ This project serves as a personal step toward writing more maintainable, scalabl
 
 I built this project using:
 
--Visual Studio Code as the main editor
--Node.js to run TypeScript outside of the browser
--ts-node, tsconfig, and ES module imports for TypeScript execution
--Standard TypeScript features such as classes, interfaces, type aliases, custom error classes, recursion, and strict typing
+- Visual Studio Code as the main editor
+- Node.js to run TypeScript outside of the browser
+- ts-node, tsconfig, and ES module imports for TypeScript execution
+- Standard TypeScript features such as classes, interfaces, type aliases, custom error classes, recursion, and strict typing
 
 The programming language used was TypeScript, with no external libraries—everything was implemented using built-in language features to focus on understanding the syntax itself.
 
@@ -27,6 +27,6 @@ The programming language used was TypeScript, with no external libraries—every
 
 # Future Work
 
--Add persistence so the wardrobe is saved (e.g., JSON file or localStorage in a web version)
--Improve the outfit generator by considering color matching
--Add more item types (jackets, accessories, etc.) and filtering options
+- Add persistence so the wardrobe is saved (e.g., JSON file or localStorage in a web version)
+- Improve the outfit generator by considering color matching
+- Add more item types (jackets, accessories, etc.) and filtering options
